@@ -1,0 +1,135 @@
+---
+title: "regression"
+author: "Sayem"
+date: "2023-11-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+```{r}
+install.packages("glmnet")
+library(glmnet)
+
+#Define the response variable
+y= Master_data$Vote_Difference
+
+#define matrix of predictor variables
+x = data.matrix(Master_data[, c('Female', 'Foreign_born', 'Associate_degree', 'Bachelor_degree', 'Graduate_or_professional_degree', 'Rural')])
+```
+
+
+```{r}
+#perform k-fold cross-validation to find optimal lambda value
+cv_model <- cv.glmnet(x, y, alpha = 0.5)
+
+#find optimal lambda value that minimizes test MSE
+best_lambda <- cv_model$lambda.min
+best_lambda
+
+
+#produce plot of test MSE by lambda value
+plot(cv_model) 
+
+```
+```{r}
+#find coefficients of best model
+best_model = glmnet(x, y, alpha = 0.5, lambda = best_lambda)
+coef(best_model)
+```
+```{r}
+#define matrix of predictor variables
+x = data.matrix(Master_data[, c('Female', 'Foreign_born', 'Associate_degree', 'Bachelor_degree', 'Graduate_or_professional_degree', 'Rural')])
+
+#Define the response variable
+y= Master_data$Vote_Difference
+
+#perform k-fold cross-validation to find optimal lambda value in Lasso
+cv_model <- cv.glmnet(x, y, alpha = 1)
+
+#perform k-fold cross-validation to find optimal lambda value in Ridge
+cv_model2 <- cv.glmnet(x, y, alpha = 0)
+
+#find optimal lambda value for Lasso that minimizes test MSE
+best_lambda <- cv_model$lambda.min
+best_lambda
+
+
+#find optimal lambda value for Ridge that minimizes test MSE
+best_lambda2 <- cv_model2$lambda.min
+best_lambda2
+
+
+#produce plot of test MSE by lambda values
+plot(cv_model) 
+plot(cv_model2) 
+
+
+
+# Model
+    lambda = 53.018
+    lambda2= 2460.911
+    
+    # standard linear regression
+    li.eq = lm(y ~ x-1) 
+    
+    # lasso
+    la.eq = glmnet(x, y, lambda=lambda, alpha=1) 
+    # Ridge
+    ri.eq = glmnet(x, y, lambda=lambda2,alpha=0) 
+    
+
+    df.comp = data.frame(Linear= li.eq$coefficients, Lasso = la.eq$beta[,1], Ridge = ri.eq$beta[,1] )
+    df.comp
+    
+    
+# Model
+    lambda = 0.1
+    
+    # standard linear regression
+    li.eq = lm(y ~ x) 
+    
+    # lasso
+    la.eq = glmnet(x, y, lambda=lambda, alpha=1) 
+    # Ridge
+    ri.eq = glmnet(x, y, lambda=lambda,alpha=0) 
+    
+
+
+    df.comp = data.frame(Linear= li.eq$coefficients, Lasso = la.eq$beta[1], Ridge = ri.eq$beta[1] )
+    df.comp
+    
+    
+    
+    
+# plot
+    x11(); par(mfrow=c(2,1)) 
+    x11(); matplot((la.eq$lambda), t(la.eq$beta),
+                   type=“l”, main=“Lasso”, lwd=2)
+    x11(); matplot((ri.eq$lambda), t(ri.eq$beta),
+                   type=“l”, main=“Ridge”, lwd=2)
+```
+
