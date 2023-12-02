@@ -1,0 +1,125 @@
+---
+title: "Econometric analysis"
+author: "Sayem"
+date: "2023-11-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+
+#Load the library tidyverse
+library(tidyverse)
+#Load the library readxl
+library(readxl)
+
+#Load the Master_data
+Master_data = read_excel("Master_data.xlsx")
+
+#Keep the relevant variables
+Master_data = Master_data %>% 
+  select("County_State_Year", "County", "State", "Year", "Foreign_born", "Female", "Associate_degree", "Bachelor_degree", "Graduate_or_professional_degree", "Rural", "Vote_share_difference") 
+  
+  
+
+```
+
+
+
+```{r}
+#Before going forward with our analysis, I am going to see the correlation matrix in order to stay away from any possible multicollinearity.
+
+#In order to check the correlation amtrix we change the variable Rural to numeric. Then we will convert it back to factor again. Change the Rural varibale to factor
+Master_data= Master_data %>% 
+  mutate(Rural= as.numeric(Rural))
+
+# Exclude the specified columns (Because they are either characters or factor)
+selected_columns = setdiff(names(Master_data), c("State", "County", "Year", "County_State_Year"))
+
+#Load the library "Hmisc"
+library("Hmisc")
+
+# Find the correlation coefficient matrix
+mydata.rcorr = rcorr(as.matrix(Master_data[, selected_columns]))
+#Print the correlation matrix
+mydata.rcorr
+
+
+#Based on the correlation matrix we see that neither any variable has high correlation with other variables, except, Bachelor degree and Graduate_or_professional_degree (Correlation coefficient= 0.81). However, we believe that including both Bachelor degree and Graduate_and_professional_degree is important because it may help better explain our model and they really matter. So, we do  not drop any variable.
+
+#We now again convert Rural to factor
+Master_data= Master_data %>% 
+  mutate(Rural= as.numeric(Rural))
+
+
+```
+
+
+```{r}
+#Load the library plm
+library(plm)
+
+
+# Create a panel data frame
+pdata = pdata.frame(Master_data, index = c("State", "County", "Year"))
+
+# Fit the fixed effects model
+model = plm(Vote_share_difference ~ Foreign_born + Associate_degree + Bachelor_degree + Graduate_or_professional_degree + Rural + Female, data = pdata, model = "within")
+
+# Print the summary of the fixed effects model
+summary(model)
+
+
+# Subset the data to include only rural observations
+rural_data <- subset(pdata, Rural == 1)
+
+# Fit the fixed effects model on the rural subset
+model2 <- plm(Vote_share_difference ~ Foreign_born + Associate_degree + Bachelor_degree + Graduate_or_professional_degree + Female, data = rural_data, model = "within")
+
+#Print the model2
+summary(model2)
+
+
+
+# Subset the data to include only urban observations
+urban_data <- subset(pdata, Rural == 0)
+
+# Fit the fixed effects model on the rural subset
+model3 <- plm(Vote_share_difference ~ Foreign_born + Associate_degree + Bachelor_degree + Graduate_or_professional_degree + Female, data = urban_data, model = "within")
+
+#Print the model3
+summary(model3)
+
+#install.packages("stargazer")
+#Load the library stargazer
+library(stargazer)
+#Extract the regression  result is latex form
+stargazer(model, model2, model3, type = "latex", title = "Regression Results", out = "regression_results.html")
+
+
+```
+
+
+
+
+```
+
+
+
+
