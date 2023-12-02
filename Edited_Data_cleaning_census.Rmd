@@ -1,0 +1,1284 @@
+---
+title: "Data cleaning"
+author: "Sayem"
+date: "2023-10-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+#Load necessary libraries
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+tidyverse_packages()
+library(readxl)
+
+```
+
+```{r}
+#Load the dataset X2010_F as Census_2010
+Census_2010 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2010_F.csv")
+
+#Create a new column indicating label of the values
+Census_2010 = Census_2010 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+#Select the columns of interests
+Census_2010 = Census_2010 %>% select(Label..Grouping., Label, X....Foreign.born, X....Total.population, X....Associate.s.degree, X....Bachelor.s.degree, X....Graduate.or.professional.degree, X....Naturalized.U.S..citizen, X....Not.a.U.S..citizen)
+
+#Create a new column named Year with 2010 value in each entry
+Census_2010$Year= 2010
+
+#Change the name of variable Label..Grouping, to County
+Census_2010 = Census_2010 %>%
+  rename(County = Label..Grouping.)
+#Change he name of the variable X....Foreign.born to Foreign_born
+Census_2010= Census_2010 %>% 
+  rename(Foreign_born= X....Foreign.born)
+#Rename the variable X....Total.population to Total_population
+Census_2010= Census_2010 %>% 
+  rename(Total_population= X....Total.population)
+#Rename the variable X....Associates.s.degree to Associate_degree
+Census_2010= Census_2010 %>% 
+  rename(Associate_degree= X....Associate.s.degree)
+#Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2010= Census_2010 %>% 
+  rename(Bachelor_degree= X....Bachelor.s.degree)
+#Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional degree
+Census_2010= Census_2010 %>% 
+  rename(Graduate_or_professional_degree = X....Graduate.or.professional.degree)
+#Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2010= Census_2010 %>% 
+  rename(Naturalized_US_citizen = X....Naturalized.U.S..citizen)
+
+#Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2010= Census_2010 %>% 
+  rename(Not_a_US_citizen = X....Not.a.U.S..citizen)
+
+```
+
+
+```{r}
+#Load the dataset X2011_F and name it Census_2011
+Census_2011 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2011_F.csv")
+
+#Create a new column indicating label of the values
+Census_2011 = Census_2011 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+#Select the columns of interests
+Census_2011= Census_2011 %>% select(Label..Grouping., Label, X....Foreign.born, X....Total.population, X....Associate.s.degree, X....Bachelor.s.degree, X....Graduate.or.professional.degree, X....Naturalized.U.S..citizen, X....Not.a.U.S..citizen)
+
+#Create a new column named Year with 2011 values in each entry
+Census_2011$Year= 2011
+
+
+#Change the name of variable Label..Grouping, to County
+Census_2011 = Census_2011 %>%
+  rename(County = Label..Grouping.)
+
+#Change he name of the variable X....Foreign.born to Foreign_born
+Census_2011= Census_2011 %>% 
+  rename(Foreign_born= X....Foreign.born)
+#Rename the variable X....Total.population to Total_population
+Census_2011= Census_2011 %>% 
+  rename(Total_population= X....Total.population)
+#Rename the variable X....Associates.s.degree to Associate_degree
+Census_2011= Census_2011 %>% 
+  rename(Associate_degree= X....Associate.s.degree)
+#Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2011= Census_2011 %>% 
+  rename(Bachelor_degree= X....Bachelor.s.degree)
+#Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional degree
+Census_2011= Census_2011 %>% 
+  rename(Graduate_or_professional_degree = X....Graduate.or.professional.degree)
+#Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2011= Census_2011 %>% 
+  rename(Naturalized_US_citizen = X....Naturalized.U.S..citizen)
+
+#Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2011= Census_2011 %>% 
+  rename(Not_a_US_citizen = X....Not.a.U.S..citizen)
+
+```
+
+
+
+```{r}
+#Load the dataset X2012_F and name it Census_2012
+Census_2012 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2012_F.csv")
+
+#Create a new column indicating label of the values
+Census_2012 = Census_2012 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+#Select the columns of interests
+Census_2012 = Census_2012 %>% select(Label..Grouping., Label, X....Foreign.born, X....Total.population, X....Associate.s.degree, X....Bachelor.s.degree, X....Graduate.or.professional.degree, X....Naturalized.U.S..citizen, X....Not.a.U.S..citizen)
+
+#Create a new column named Year with 2012 values in each entry
+Census_2012$Year= 2012
+
+#Change the name of variable Label..Grouping, to County
+Census_2012 = Census_2012 %>%
+  rename(County = Label..Grouping.)
+#Change he name of the variable X....Foreign.born to Foreign_born
+Census_2012= Census_2012 %>% 
+  rename(Foreign_born= X....Foreign.born)
+#Rename the variable X....Total.population to Total_population
+Census_2012= Census_2012 %>% 
+  rename(Total_population= X....Total.population)
+#Rename the variable X....Associates.s.degree to Associate_degree
+Census_2012= Census_2012 %>% 
+  rename(Associate_degree= X....Associate.s.degree)
+#Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2012= Census_2012 %>% 
+  rename(Bachelor_degree= X....Bachelor.s.degree)
+#Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional degree
+Census_2012= Census_2012 %>% 
+  rename(Graduate_or_professional_degree = X....Graduate.or.professional.degree)
+#Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2012= Census_2012 %>% 
+  rename(Naturalized_US_citizen = X....Naturalized.U.S..citizen)
+
+#Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2012= Census_2012 %>% 
+  rename(Not_a_US_citizen = X....Not.a.U.S..citizen)
+```
+
+
+```{r}
+#Load the dataset X2013_F and name it Census_2013
+Census_2013 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2013_F.csv")
+
+#Create a new column indicating label of the values
+Census_2013 = Census_2013 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+
+#Select the columns of interests
+Census_2013 = Census_2013 %>% select(Label..Grouping., Label, X....Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+#Create a new column named Year with 2013 values in each entry
+Census_2013$Year= 2013
+
+
+#Change the name of variable Label..Grouping, to County
+Census_2013 = Census_2013 %>%
+  rename(County = Label..Grouping.)
+#Change he name of the variable X....Foreign.born to Foreign_born
+Census_2013= Census_2013 %>% 
+  rename(Foreign_born= X....Foreign.born)
+#Rename the variable X....Total.population to Total_population
+Census_2013= Census_2013 %>% 
+  rename(Total_population= X....Total.population)
+#Rename the variable X....Associates.s.degree to Associate_degree
+Census_2013= Census_2013 %>% 
+  rename(Associate_degree= X........Associate.s.degree)
+#Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2013= Census_2013 %>% 
+  rename(Bachelor_degree= X........Bachelor.s.degree)
+#Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional degree
+Census_2013= Census_2013 %>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+#Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2013= Census_2013 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+#Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2013= Census_2013 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+```
+
+
+```{r}
+#Load the dataset X2014_F and name it Census_2014
+Census_2014 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2014_F.csv")
+
+#Create a new column indicating label of the values
+Census_2014 = Census_2014 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+#Select the columns of interests
+Census_2014 = Census_2014 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+#Create a new column named Year with 2014 values in each entry
+Census_2014$Year= 2014
+
+
+#Change the name of variable Label..Grouping, to County
+Census_2014= Census_2014 %>%
+  rename(County = Label..Grouping.)
+#Change he name of the variable X........Foreign.born to Foreign_born
+Census_2014= Census_2014 %>% 
+  rename(Foreign_born= X........Foreign.born)
+#Rename the variable X....Total.population to Total_population
+Census_2014= Census_2014 %>% 
+  rename(Total_population= X....Total.population)
+#Rename the variable X....Associates.s.degree to Associate_degree
+Census_2014= Census_2014 %>% 
+  rename(Associate_degree= X........Associate.s.degree)
+#Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2014= Census_2014 %>% 
+  rename(Bachelor_degree= X........Bachelor.s.degree)
+#Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional degree
+Census_2014= Census_2014 %>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+#Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2014= Census_2014 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+#Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2014= Census_2014 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+```
+
+
+```{r}
+#Load the dataset X2015_F and name it Census_2015
+Census_2015 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2015_F.csv")
+
+#Create a new column indicating label of the values
+Census_2015 = Census_2015 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+#Select the columns of interests
+Census_2015 = Census_2015 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen,X........Not.a.U.S..citizen)
+
+#Create a new column named Year with 2015 values in each entry
+Census_2015$Year= 2015
+
+
+#Change the name of variable Label..Grouping, to County
+Census_2015 = Census_2015 %>%
+  rename(County = Label..Grouping.)
+#Change he name of the variable X....Foreign.born to Foreign_born
+Census_2015= Census_2015 %>% 
+  rename(Foreign_born= X........Foreign.born)
+#Rename the variable X....Total.population to Total_population
+Census_2015= Census_2015 %>% 
+  rename(Total_population= X....Total.population)
+#Rename the variable X....Associates.s.degree to Associate_degree
+Census_2015= Census_2015 %>% 
+  rename(Associate_degree= X........Associate.s.degree)
+#Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2015= Census_2015 %>% 
+  rename(Bachelor_degree= X........Bachelor.s.degree)
+#Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional degree
+Census_2015= Census_2015%>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+#Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2015= Census_2015 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+#Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2015= Census_2015 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+```
+
+
+
+
+```{r}
+#Load the dataset X2016_F and name it Census_2016
+Census_2016 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2016_F.csv")
+
+#Create a new column indicating label of the values
+Census_2016 = Census_2016 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+#Select the columns of interests
+Census_2016 = Census_2016 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+#Create a new column named Year with 2016 values in each entry
+Census_2016$Year= 2016
+
+
+#Change the name of variable Label..Grouping, to County
+Census_2016 = Census_2016 %>%
+  rename(County = Label..Grouping.)
+#Change he name of the variable X....Foreign.born to Foreign_born
+Census_2016= Census_2016 %>% 
+  rename(Foreign_born= X........Foreign.born)
+#Rename the variable X....Total.population to Total_population
+Census_2016= Census_2016 %>% 
+  rename(Total_population= X....Total.population)
+#Rename the variable X....Associates.s.degree to Associate_degree
+Census_2016= Census_2016 %>% 
+  rename(Associate_degree= X........Associate.s.degree)
+#Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2016= Census_2016 %>% 
+  rename(Bachelor_degree= X........Bachelor.s.degree)
+#Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional degree
+Census_2016= Census_2016%>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+#Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2016= Census_2016 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+#Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2016= Census_2016 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+```
+
+
+
+```{r}
+#Load the dataset X2017_F and name it Census_2017
+Census_2017 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2017_F.csv")
+
+# Create a new column indicating label of the values
+Census_2017 = Census_2017 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Census_2017 = Census_2017 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+# Create a new column named Year with 2017 values in each entry
+Census_2017$Year= 2017
+
+# Change the name of variable Label..Grouping, to County
+Census_2017 = Census_2017 %>%
+  rename(County = Label..Grouping.)
+
+# Change the name of the variable X....Foreign.born to Foreign_born
+Census_2017 = Census_2017 %>% 
+  rename(Foreign_born= X........Foreign.born)
+
+# Rename the variable X....Total.population to Total_population
+Census_2017 = Census_2017 %>% 
+  rename(Total_population= X....Total.population)
+
+# Rename the variable X....Associates.s.degree to Associate_degree
+Census_2017 = Census_2017 %>% 
+  rename(Associate_degree= X........Associate.s.degree)
+
+# Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2017 = Census_2017 %>% 
+  rename(Bachelor_degree= X........Bachelor.s.degree)
+
+# Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional_degree
+Census_2017 = Census_2017 %>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+
+# Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2017 = Census_2017 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+# Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2017 = Census_2017 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+
+```
+
+
+```{r}
+#Load the dataset X2018_F and name it Census_2018
+Census_2018 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2018_F.csv")
+
+# Create a new column indicating label of the values
+Census_2018 = Census_2018 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Census_2018 = Census_2018 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+# Create a new column named Year with 2018 values in each entry
+Census_2018$Year= 2018
+
+# Change the name of variable Label..Grouping to County
+Census_2018 = Census_2018 %>%
+  rename(County = Label..Grouping.)
+
+
+# Change the name of the variable X....Foreign.born to Foreign_born
+Census_2018 = Census_2018 %>% 
+  rename(Foreign_born = X........Foreign.born)
+
+# Rename the variable X....Total.population to Total_population
+Census_2018 = Census_2018 %>% 
+  rename(Total_population = X....Total.population)
+
+# Rename the variable X....Associate.s.degree to Associate_degree
+Census_2018 = Census_2018 %>% 
+  rename(Associate_degree = X........Associate.s.degree)
+
+# Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2018 = Census_2018 %>% 
+  rename(Bachelor_degree = X........Bachelor.s.degree)
+
+# Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional_degree
+Census_2018 = Census_2018 %>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+
+# Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2018 = Census_2018 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+# Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2018 = Census_2018 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+
+```
+
+
+
+```{r}
+#Load the dataset X2019_F and name it Census_2019
+# Load the dataset Census_2019
+Census_2019 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2019_F.csv")
+
+# Create a new column indicating the label of the values
+Census_2019 = Census_2019 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Census_2019 = Census_2019 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+# Create a new column named Year with 2019 values in each entry
+Census_2019$Year = 2019
+
+# Change the name of variable Label..Grouping to County
+Census_2019 = Census_2019 %>%
+  rename(County = Label..Grouping.)
+
+# Change the name of the variable X....Foreign.born to Foreign_born
+Census_2019 = Census_2019 %>% 
+  rename(Foreign_born = X........Foreign.born)
+
+# Rename the variable X....Total.population to Total_population
+Census_2019 = Census_2019 %>% 
+  rename(Total_population = X....Total.population)
+
+# Rename the variable X....Associate.s.degree to Associate_degree
+Census_2019 = Census_2019 %>% 
+  rename(Associate_degree = X........Associate.s.degree)
+
+# Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2019 = Census_2019 %>% 
+  rename(Bachelor_degree = X........Bachelor.s.degree)
+
+# Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional_degree
+Census_2019 = Census_2019 %>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+
+# Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2019 = Census_2019 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+# Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2019 = Census_2019 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+
+```
+
+
+
+```{r}
+# Load the dataset X2020_F and name it Census_2020
+Census_2020 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2020_F.csv")
+
+# Create a new column indicating the label of the values
+Census_2020 = Census_2020 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Census_2020 = Census_2020 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+# Create a new column named Year with 2020 values in each entry
+Census_2020$Year = 2020
+
+# Change the name of variable Label..Grouping to County
+Census_2020 = Census_2020 %>%
+  rename(County = Label..Grouping.)
+
+
+# Change the name of the variable X....Foreign.born to Foreign_born
+Census_2020 = Census_2020 %>% 
+  rename(Foreign_born = X........Foreign.born)
+
+# Rename the variable X....Total.population to Total_population
+Census_2020 = Census_2020 %>% 
+  rename(Total_population = X....Total.population)
+
+# Rename the variable X....Associate.s.degree to Associate_degree
+Census_2020 = Census_2020 %>% 
+  rename(Associate_degree = X........Associate.s.degree)
+
+# Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2020 = Census_2020 %>% 
+  rename(Bachelor_degree = X........Bachelor.s.degree)
+
+# Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional_degree
+Census_2020 = Census_2020 %>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+
+# Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2020 = Census_2020 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+# Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2020 = Census_2020 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+
+
+```
+
+
+```{r}
+# Load the dataset X2021_F and name it Census_2021
+Census_2021 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2021_F.csv")
+
+# Create a new column indicating the label of the values
+Census_2021 = Census_2021 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Census_2021 = Census_2021 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+# Create a new column named Year with 2021 values in each entry
+Census_2021$Year = 2021
+
+# Change the name of variable Label..Grouping to County
+Census_2021 = Census_2021 %>%
+  rename(County = Label..Grouping.)
+
+
+# Change the name of the variable X....Foreign.born to Foreign_born
+Census_2021 = Census_2021 %>% 
+  rename(Foreign_born = X........Foreign.born)
+
+# Rename the variable X....Total.population to Total_population
+Census_2021 = Census_2021 %>% 
+  rename(Total_population = X....Total.population)
+
+# Rename the variable X....Associate.s.degree to Associate_degree
+Census_2021 = Census_2021 %>% 
+  rename(Associate_degree = X........Associate.s.degree)
+
+# Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2021 = Census_2021 %>% 
+  rename(Bachelor_degree = X........Bachelor.s.degree)
+
+# Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional_degree
+Census_2021 = Census_2021 %>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+
+# Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2021 = Census_2021 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+# Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2021 = Census_2021 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+
+```
+
+
+```{r}
+## Load the dataset X2022_F and name it Census_2022
+Census_2022 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2022_F.csv")
+
+# Create a new column indicating the label of the values
+Census_2022 = Census_2022 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Census_2022 = Census_2022 %>% select(Label..Grouping., Label, X........Foreign.born, X....Total.population, X........Associate.s.degree, X........Bachelor.s.degree, X........Graduate.or.professional.degree, X........Naturalized.U.S..citizen, X........Not.a.U.S..citizen)
+
+# Create a new column named Year with 2010 values in each entry
+Census_2022$Year = 2022
+
+# Change the name of variable Label..Grouping to County
+Census_2022 = Census_2022 %>%
+  rename(County = Label..Grouping.)
+
+# Change the name of the variable X....Foreign.born to Foreign_born
+Census_2022 = Census_2022 %>% 
+  rename(Foreign_born = X........Foreign.born)
+
+# Rename the variable X....Total.population to Total_population
+Census_2022 = Census_2022 %>% 
+  rename(Total_population = X....Total.population)
+
+# Rename the variable X....Associate.s.degree to Associate_degree
+Census_2022 = Census_2022 %>% 
+  rename(Associate_degree = X........Associate.s.degree)
+
+# Rename the variable X....Bachelor.s.degree to Bachelor_degree
+Census_2022 = Census_2022 %>% 
+  rename(Bachelor_degree = X........Bachelor.s.degree)
+
+# Rename the variable X....Graduate.or.professional.degree to Graduate_or_professional_degree
+Census_2022 = Census_2022 %>% 
+  rename(Graduate_or_professional_degree = X........Graduate.or.professional.degree)
+
+# Rename the variable X....Naturalized.U.S.citizen to Naturalized_US_citizen
+Census_2022 = Census_2022 %>% 
+  rename(Naturalized_US_citizen = X........Naturalized.U.S..citizen)
+
+# Rename the variable X....Not.a.U.S..citizen to Not_a_US_citizen
+Census_2022 = Census_2022 %>% 
+  rename(Not_a_US_citizen = X........Not.a.U.S..citizen)
+
+
+```
+
+```{r}
+#Append all the dataset sand make a dataset named Census
+Census = bind_rows(Census_2010, Census_2011, Census_2012, Census_2013, Census_2014, Census_2015, Census_2016, Census_2017, Census_2018, Census_2019, Census_2020, Census_2021, Census_2022)
+
+```
+
+
+
+```{r}
+
+#Remove "!!Percent" and "!!Estimate" from the values of County column in Census data frame
+Census$County = gsub("!!Percent|!!Estimate", "", Census$County)
+
+#Separate the state names from the County column and create a new variable "State"
+Census = Census %>%
+  separate(County, into = c("County", "State"), sep = ",\\s*", extra = "merge", fill = "right")
+
+
+#Remove the word "county", from the county column
+Census$County = gsub(" County", "", Census$County)
+
+```
+
+
+```{r}
+#Create a new variable named Rural containing values 1 if the population of a county is less than or equal to 19999, and 0 if other wise. We will mutate a new column using the total population variable. (Economic Research Service, USDA). Also keep the county column
+
+Census = Census %>%
+  mutate(Rural = ifelse(`Total_population` <= 19999, 1, 0))
+```
+
+
+```{r}
+# Separate the data into Census_estimate and Census_Percent data frames
+Census_estimate = Census %>% filter(Label == "Estimate")
+Census_percent = Census %>% filter(Label == "Percent")
+```
+
+```{r}
+# Basically we will work with Census_percent data where all the values of the columns are in percentage.
+#Remove Total_population, Not_a_US_Citizen and Naturalized_US_Citizen and Label columns from Census_per
+
+Census_percent = Census_percent %>%
+  select(-Total_population, -Not_a_US_citizen, -Naturalized_US_citizen, -Label)
+
+
+```
+
+
+```{r}
+#Create a new column or surrogate key in Census_percent data named County_State_Year using County and Year column
+Census_percent$County_State_Year = paste(Census_percent$County, Census_percent$State, Census_percent$Year, sep = "_")
+```
+
+
+
+```{r}
+
+#Arrange the dataset Census_percent by County_State_Year
+Census_percent = Census_percent %>%
+  arrange(County_State_Year)
+```
+
+
+
+```{r}
+#Understand the definition, origin, and units of the datasets
+
+summary(Census_percent)
+
+str(Census_percent)
+
+```
+
+
+
+```{r}
+#Now for more ease I create a function to apply the same process of removing "%" and converting variables to numeric for multiple columns in Census_percent.
+
+# Define a function to clean and convert a specific column
+clean_and_convert_column_2 = function(Census_percent, col_name) {
+  Census_percent[[col_name]] = as.numeric(gsub("%", "", Census_percent[[col_name]], fixed = TRUE))
+  return(Census_percent)
+}
+
+# Specify the columns you want to clean and convert
+columns_to_clean_and_convert_2 = c("Foreign_born", "Associate_degree", "Bachelor_degree", "Graduate_or_professional_degree")
+
+# Loop through the specified columns and apply the function
+for (col in columns_to_clean_and_convert_2) {
+  Census_percent = clean_and_convert_column_2(Census_percent, col)
+}
+
+#Now we have removed "%" and converted these columns to numeric.
+
+#Convert Rural to a factor variable
+Census_percent$Rural=as.factor(Census_percent$Rural)
+```
+
+
+
+
+
+```{r}
+#Now I check missing values in Census_percent data frame
+
+#Create a function and for loop to Count missing values
+count_missing_values = function(Census_percent, columns_to_check) {
+  missing_value_counts = numeric(length(columns_to_check))
+  
+  for (i in 1:length(columns_to_check)) {
+    missing_value_counts[i] = sum(is.na(Census_percent[[columns_to_check[i]]]))
+  }
+  
+  names(missing_value_counts) = columns_to_check
+  return(missing_value_counts)
+}
+
+# Specify the columns I want to check for missing values
+columns_to_check = c("County", "State", "Foreign_born", "Associate_degree", "Bachelor_degree", "Graduate_or_professional_degree", "Year", "Rural")
+
+# Call the function to count missing values
+missing_counts = count_missing_values(Census_percent, columns_to_check)
+
+# Display the missing value counts
+print(missing_counts)
+
+##In the given U.S. Census dataset, there are no missing values for essential variables such as County, State, Rural, and Year. However, there are substantial amounts of missing data in several other columns, including 2240 for "Foreign_born"; 947 missing values for Associate_degree," "Bachelor_degree," and "Graduate_or_professional_degree". Considering the nature of the data and the potential complexities of imputing these missing values, it may be prudent to remove rows with missing data in these specific columns, as imputation might not accurately replace the true values and could introduce bias into the analysis. So we remove the missing values.
+
+
+```
+
+
+
+
+```{r}
+#Check extreme values in Foreign_born using histogram
+ggplot(Census_percent, aes(x = Foreign_born)) +
+  geom_histogram(binwidth = 10, fill = "red", color = "black") +
+  labs(x = "Foreign_born percentage", y = "Frequency") +
+  theme_minimal()
+
+## We see that the distribution is highly skewed. But we can not consider any extreme values below 100, because some county could have very high amount of foreign_born population. Now we remove if there is any values over 100 because the value in percentage can not be over 100.
+Census_percent = Census_percent %>%
+  filter(Foreign_born <= 100)
+
+```
+
+```{r}
+#Check extreme values in Associate_degree using histogram
+ggplot(Census_percent, aes(x = Associate_degree)) +
+  geom_histogram(binwidth = 1, fill = "blue", color = "black") +
+  labs(x = "Associate_degree percentage", y = "Frequency") +
+  theme_minimal()
+
+## We see that the distribution is not much skewed. The distribution is close to a normal distribution. So, we will ot transform the variable. There seems to be no extreme values. Now we remove if there is any values over 100 because the value in percentage can not be over 100.
+Census_percent = Census_percent %>%
+  filter(Associate_degree <= 100)
+```
+
+
+
+```{r}
+#Check extreme values in Bachelor_degree using histogram
+ggplot(Census_percent, aes(x = Bachelor_degree)) +
+  geom_histogram(binwidth = 1, fill = "blue", color = "black") +
+  labs(x = "Bachelor_degree percentage", y = "Frequency") +
+  theme_minimal()
+## We see that the distribution is little bit skewed. This is possible because many counties could have higher ration of people with bachelor degree, Since, the values are already in percentage, we will not transform them in log. There seems to be no extreme values. Now we remove if there is any values over 100 because the value in percentage can not be over 100.
+Census_percent = Census_percent %>%
+  filter(Bachelor_degree <= 100)
+
+```
+
+
+```{r}
+#Check extreme values in Graduate_or_professional_degree using histogram
+ggplot(Census_percent, aes(x = Graduate_or_professional_degree)) +
+  geom_histogram(binwidth = 1, fill = "green", color = "black") +
+  labs(x = "Graduate_or_professional_degree percentage", y = "Frequency") +
+  theme_minimal()
+## We see that the distribution is skewed. It's entirely possible that many counties have a higher proportion of people with Graduate or professional degree degrees. In data like education levels, there can be substantial variation from one county to another. So, we will not transform the variable There seems to be no extreme values. Now we remove if there is any values over 100 because the value in percentage can not be over 100.
+Census_percent = Census_percent %>%
+  filter(Graduate_or_professional_degree <= 100)
+```
+
+
+
+
+
+```{r}
+#Now I will convert all the string variables in Census_percent to upper case by using a function and for loop
+# Function to convert a character vector to uppercase
+convert_to_uppercase = function(Census_percent) {
+  return(toupper(Census_percent))
+}
+
+# Identify string variables (character columns)
+string_columns = sapply(Census_percent, is.character)
+
+# Loop through the string variables and apply the conversion function
+for (col in names(Census_percent)[string_columns]) {
+  Census_percent[, col] = convert_to_uppercase(Census_percent[, col])
+}
+
+```
+
+
+
+```{r}
+#Now I remove punctuation from the string variables using a function and for loop except County_State_Year
+#load necessary library 
+library(stringr)
+
+
+# Function to remove punctuation from a character vector
+remove_punctuation = function(text) {
+  # Use str_replace_all to remove punctuation
+  cleaned_text = str_replace_all(text, "[[:punct:]]", " ")
+  return(cleaned_text)
+}
+
+# Iterate through string columns and apply the function, excluding "County_State_Year"
+for (col in setdiff(names(Census_percent), "County_State_Year")) {
+  if (is.character(Census_percent[[col]])) {
+    Census_percent[[col]] = remove_punctuation(Census_percent[[col]])
+  }
+}
+```
+
+
+```{r}
+##Now I trim spaces(extra, starting, ending) using a function and for loop in Census_percent except County_State_Year
+# Function to trim spaces (extra, starting, and ending) from a character vector
+trim_spaces = function(text) {
+  # Use str_squish to trim extra spaces
+  trimmed_text = str_squish(text)
+  return(trimmed_text)
+}
+
+# Iterate through string columns and apply the function
+for (col in setdiff(names(Census_percent), "County_State_Year")) {
+  if (is.character(Census_percent[[col]])) {
+    Census_percent[[col]] = trim_spaces(Census_percent[[col]])
+  }
+}
+
+
+```
+
+```{r}
+##Now I remove sepcific words (a, the) from the variables using a function and a for loop
+# Define a custom function to remove specific words
+remove_words = function(text, words_to_remove) {
+  for (word in words_to_remove) {
+    text = gsub(paste0("\\b", word, "\\b"), "", text)
+  }
+  return(text)
+}
+
+# Specify the words to remove
+words_to_remove = c("the", "a")
+
+# Iterate through string columns and apply the function
+for (col in names(Census_percent)) {
+  if (is.character(Census_percent[[col]])) {
+    Census_percent[[col]] = remove_words(Census_percent[[col]], words_to_remove)
+  }
+}
+
+```
+
+```{r}
+#Now limit the range of all the numeric variables except Year to 0-100 using a function and for loop
+
+# Function to constrain numeric variables to the range [0, 100] except for "year"
+constrain_to_range = function(Census_percent, column_name) {
+  if (is.numeric(Census_percent) && column_name != "Year") {
+    Census_percent[Census_percent < 0] = 0
+    Census_percent[Census_percent > 100] = 100
+  }
+  return(Census_percent)
+}
+
+# Iterate through columns and apply the function
+for (col in names(Census_percent)) {
+  Census_percent[[col]] = constrain_to_range(Census_percent[[col]], col)
+}
+
+```
+
+```{r}
+
+# Constrain the "Year" variable in Census_percent to the range [2010, 2022]
+Census_percent = Census_percent %>%
+  filter(Year >= 2010, Year <= 2022)
+
+```
+
+
+
+
+
+
+```{r}
+#Load the dataset X2012_F and name it Female_2012
+Female_2012 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2012_F.csv")
+
+# Create a new column indicating label of the values
+Female_2012 = Female_2012 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Female_2012 = Female_2012 %>% select(Label..Grouping., X....Females.15.years.and.over, X....Males.15.years.and.over)
+
+# Create a new column named Year with 2012 values in each entry
+Female_2012$Year= 2012
+
+# Change variable names below
+Female_2012 = Female_2012 %>%
+  rename(Female = X....Females.15.years.and.over) %>% 
+  rename(Male= X....Males.15.years.and.over) %>% 
+  rename(County= Label..Grouping.)
+
+# Create a sequence of row indices to keep odd rows
+rows_to_keep = seq(1, nrow(Female_2012), by = 2)
+
+# Subset the data frame to keep only the odd rows
+Female_2012 = Female_2012[rows_to_keep, ]
+```
+
+```{r}
+#Load the dataset X2016_F and name it Female_2016
+Female_2016 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2016_F.csv")
+
+# Create a new column indicating label of the values
+Female_2016 = Female_2016 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Female_2016 = Female_2016 %>% select(Label..Grouping., X....Females.15.years.and.over, X....Males.15.years.and.over)
+
+# Create a new column named Year with 2016 values in each entry
+Female_2016$Year= 2016
+
+# Change the name of the variables below
+Female_2016 = Female_2016 %>%
+  rename(Female = X....Females.15.years.and.over) %>% 
+  rename(Male= X....Males.15.years.and.over) %>% 
+  rename(County= Label..Grouping.)
+
+# Create a sequence of row indices to keep odd rows
+rows_to_keep = seq(1, nrow(Female_2016), by = 2)
+
+# Subset the data frame to keep only the odd rows
+Female_2016 = Female_2016[rows_to_keep, ]
+```
+
+```{r}
+#Load the dataset X2020_F and name it Female_2020
+Female_2020 = read.csv("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/X2020_F.csv")
+
+# Create a new column indicating label of the values
+Female_2020 = Female_2020 %>%
+  mutate(Label = ifelse(grepl("Estimate$", Label..Grouping.), "Estimate", "Percent"))
+
+# Select the columns of interest
+Female_2020 = Female_2020 %>% select(Label..Grouping., X....Females.15.years.and.over, X....Males.15.years.and.over)
+
+# Create a new column named Year with 2020 values in each entry
+Female_2020$Year= 2020
+
+# Change the name of the variables below
+Female_2020 = Female_2020 %>%
+  rename(Female = X....Females.15.years.and.over) %>% 
+  rename(Male= X....Males.15.years.and.over) %>% 
+  rename(County= Label..Grouping.)
+
+# Create a sequence of row indices to keep odd rows
+rows_to_keep = seq(1, nrow(Female_2020), by = 2)
+
+# Subset the data frame to keep only the odd rows
+Female_2020 = Female_2020[rows_to_keep, ]
+```
+
+```{r}
+#Append all the datasets and make a dataset named Female
+Female = bind_rows(Female_2012, Female_2016, Female_2020)
+```
+
+```{r}
+#Separate the state names from the County column and create a new variable "State"
+Female = Female %>%
+  separate(County, into = c("County", "State"), sep = ",\\s*", extra = "merge", fill = "right")
+
+
+#Remove the word "county", from the county column
+Female$County = gsub(" County", "", Female$County)
+
+ #Remove !!Estimate from the State variable
+Female$State = sub("!!Estimate", "", Female$State)
+
+```
+
+```{r}
+#Create a new column or surrogate key in Female data named County_State_Year using County and Year column
+Female$County_State_Year = paste(Female$County, Female$State, Female$Year, sep = "_")
+```
+
+```{r}
+# Check for missing values in the entire data frame
+missing_values <- sum(is.na(Female))
+
+#Print missing value
+missing_values
+
+#There is no missing values
+```
+
+```{r}
+# Remove punctuation from the "Female" and "Male" variables
+Female$Female = gsub("[[:punct:]]", "", Female$Female)
+Female$Male = gsub("[[:punct:]]", "", Female$Male)
+
+
+#Convert"Female", "Male" to  numeric
+Female= Female %>% 
+  mutate(Female=as.numeric(Female)) %>% 
+  mutate(Male= as.numeric(Male))
+```
+
+```{r}
+# Make all the character variables Uppercase
+Female= Female %>% 
+  mutate(County= toupper(County)) %>% 
+  mutate(State= toupper(State)) %>% 
+  mutate(County_State_Year= toupper(County_State_Year))
+```
+
+```{r}
+# Create a new column 'Total Population' by summing 'Female' and 'Male'
+Female$Total_population = Female$Female + Female$Male
+```
+
+```{r}
+#Create a new variable Female_per which is ratio of Female population to Total population
+
+Female$Female = (Female$Female / Female$Total)*100
+
+```
+
+
+```{r}
+#Load the dataset Election
+library(readxl)
+Election = read_excel("C:/Msu applied economics/Advanced data analytics/Project/Data/Data/Election/President_Clean2.xlsx")
+
+#See the distinct values in state
+distinct_states = unique(Election$State)
+
+#Print distinct_states
+distinct_states
+
+
+# Create a mapping between abbreviated and full state names
+state_mapping = c(
+  "AL" = "Alabama",
+  "AZ" = "Arizona",
+  "AR" = "Arkansas",
+  "CA" = "California",
+  "CO" = "Colorado",
+  "CT" = "Connecticut",
+  "DE" = "Delaware",
+  "DC" = "District of Columbia",
+  "FL" = "Florida",
+  "GA" = "Georgia",
+  "HI" = "Hawaii",
+  "ID" = "Idaho",
+  "IL" = "Illinois",
+  "IN" = "Indiana",
+  "IA" = "Iowa",
+  "KS" = "Kansas",
+  "KY" = "Kentucky",
+  "LA" = "Louisiana",
+  "ME" = "Maine",
+  "MD" = "Maryland",
+  "MA" = "Massachusetts",
+  "MI" = "Michigan",
+  "MN" = "Minnesota",
+  "MS" = "Mississippi",
+  "MO" = "Missouri",
+  "MT" = "Montana",
+  "NE" = "Nebraska",
+  "NV" = "Nevada",
+  "NH" = "New Hampshire",
+  "NJ" = "New Jersey",
+  "NM" = "New Mexico",
+  "NY" = "New York",
+  "NC" = "North Carolina",
+  "ND" = "North Dakota",
+  "OH" = "Ohio",
+  "OK" = "Oklahoma",
+  "OR" = "Oregon",
+  "PA" = "Pennsylvania",
+  "RI" = "Rhode Island",
+  "SC" = "South Carolina",
+  "SD" = "South Dakota",
+  "TN" = "Tennessee",
+  "TX" = "Texas",
+  "UT" = "Utah",
+  "VT" = "Vermont",
+  "VA" = "Virginia",
+  "WA" = "Washington",
+  "WV" = "West Virginia", 
+  "WI" = "Wisconsin",
+  "WY" = "Wyoming",
+  "AK" = "Alaska"
+)
+
+# Replace the abbreviated state names with full names in your data frame
+Election$State = state_mapping[Election$State]
+
+#Make the State uppercase
+Election$State= toupper(Election$State)
+
+```
+
+```{r}
+#Create a new column in Election named County_year using County and Year column
+Election$County_State_Year = paste(Election$County, Election$State, Election$Year, sep = "_")
+
+
+#Rename column "Candidate Votes" to Votes
+Election = Election %>%
+  rename(Votes = `Candidate Votes`)
+
+
+# Create a new column named democrat_votes taking values of votes for DEMOCRAT from Party
+Election = Election %>%
+  mutate(Democrat_Votes = ifelse(Party == "DEMOCRAT", Votes, 0))
+
+# Create a new column named republican_votes taking values of votes for REPUBLICAN from Party
+Election = Election %>%
+  mutate(Republican_Votes = ifelse(Party == "REPUBLICAN", Votes, 0))
+         
+#Create a new data frame named election_dem removing "0" value from the democrat_votes column
+
+Election_dem = Election %>%
+  filter(Democrat_Votes != 0)
+
+#Create a new data frame named election_rep removing "0" value from the republican_votes column
+
+Election_rep = Election %>%
+  filter(Republican_Votes != 0)
+
+#Create a new column in Election_dem named County_Year_State using County and Year column
+Election_dem$County_State_Year = paste(Election_dem$County, Election_dem$State, Election_dem$Year, sep = "_")
+
+#Create a new column in Election_rep named County_Year_State using County and Year column
+Election_rep$County_State_Year = paste(Election_rep$County, Election_rep$State, Election_rep$Year, sep = "_")
+
+
+# Remove duplicates from Election_dem
+Election_dem = distinct(Election_dem, Year, County, State, FIPS, Party, Votes, "Total Votes", Democrat_Votes, Republican_Votes, County, County_State_Year)
+
+# Remove duplicates from Election_rep
+Election_rep = distinct(Election_rep, Year, County, State, FIPS, Party, Votes, "Total Votes", Democrat_Votes, Republican_Votes, County_State_Year)
+
+#Merge the two data set Election_dem and Election_rep and name it Election_main
+Election_main = merge(Election_dem, Election_rep, by = c( "County_State_Year", "County", "Year", "State"), all.x=TRUE, all.y= FALSE)
+
+#Keep County_State_Year, County, State, Year, Democrat.votes.x, Republican.votes.y columns
+Election_main = Election_main %>%
+  select(County_State_Year, County, State, Year, Democrat_Votes.x, Republican_Votes.y)
+```
+
+
+```{r}
+#Rename Democrat_Votes.x to Democrat_Votes and Republican_Votes.y to Republican_Votes
+Election_main = Election_main %>% 
+  rename(Democrat_Votes= Democrat_Votes.x) %>% 
+  rename(Republican_Votes= Republican_Votes.y)
+
+#Remove duplicate values from Democrat_Votes
+Election_main = Election_main %>%
+  distinct(Democrat_Votes ,.keep_all = TRUE)
+
+#Left_join Census_percent and Election_main by County_State_Year
+ merged_data_1=  merge(Census_percent, Election_main, by = c( "County_State_Year", "County", "Year", "State"), all.x=TRUE, all.y= TRUE)
+
+#Remove all the NA values 
+merged_data_1 = na.omit(merged_data_1)
+
+
+#Remove all the duplicates
+merged_data_1 = distinct(merged_data_1, County_State_Year, .keep_all = TRUE)
+
+#Left_join merged_data_1 and Female by County_State_Year, County, Year and State
+ merged_data_2=  merge(merged_data_1, Female, by = c( "County_State_Year", "County", "Year", "State"), all.x=TRUE, all.y= TRUE)
+ 
+ #Remove all the NA values 
+merged_data_2 = na.omit(merged_data_2)
+
+
+#Remove all the duplicates
+Merged_data_2 = distinct(merged_data_2, County_State_Year, .keep_all = TRUE)
+```
+
+```{r}
+#Create a new variable named Total_votes
+merged_data_2= merged_data_2 %>% 
+  mutate(Total_votes= Democrat_Votes + Republican_Votes)
+
+#Create three new variables named Democrat_vote_share, Republican_vote_share and Vote_share_difference and name the merged_data_2 to main_data
+main_data= merged_data_2 %>% 
+  mutate(Democrat_vote_share= Democrat_Votes/ Total_votes) %>% 
+  mutate(Republican_vote_share= Republican_Votes/ Total_votes) %>% 
+  mutate(Vote_share_difference= Republican_vote_share - Democrat_vote_share)
+```
+
+
+```{r}
+#Create a new variable named Vote difference by taking difference between republican and democrat votes
+
+main_data$Vote_Difference = main_data$Republican_Votes - main_data$Democrat_Votes
+
+#Save the Main_data and name it Master_data
+library(openxlsx)
+write.xlsx(main_data, "Master_data.xlsx")
+
+
+```
+
+
+
