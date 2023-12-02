@@ -1,0 +1,305 @@
+---
+title: "Project-Stage 2"
+author: "Katy Schmitt"
+date: "2023-10-30"
+output: html_document
+---
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(gganimate)
+library(RColorBrewer)
+library(readxl)
+library(binsreg)
+library(tidyr)
+library(dplyr)
+Master_Data = read_excel("/Users/katelynschmitt/Documents/Econ 560/PROJECT/Master_data.xlsx")
+
+```
+
+## Immigrant Populations and Presidential Election Outcomes ##
+### Katy Schmitt and Md Sayemul Islam ###
+### Stage 2 Draft Exploratory Analysis ###
+
+### Advanced Data Analytics - ECNS_560 ###
+#### November 2, 2023 ####  
+
+
+
+### Motivation ###  
+Immigrants in the US have been critical in shaping the viewpoints of communities and have potential to sway political election outcomes. As immigrant populations continue to grow, it is important to consider how the presence of foreign born people may have a relationship with a community's political agenda. The extent to which immigrants participate in and influence local politics can have a substantial impact on the representation of various perspectives in American society. Recognizing the political preferences and engagement of immigrant populations is critical for fostering inclusive and representative governance.  
+
+Immigrant populations are particularly concerned about issues such as immigration reform, education, healthcare, and labor rights. Their participation in local politics has the potential to impact policy decisions in these areas. Policymakers can design more effective methods to serve the different needs of their people by studying and comprehending these policy implications. This theme also emphasizes the significance of social cohesion. Interactions between immigrant and non-immigrant populations can have an impact on community dynamics, with the possibility of both political polarization and cooperation. Understanding how immigrant communities integrate politically and socially can aid in the development of more peaceful and cohesive societies.
+
+
+### Research Question ###
+#### Descriptive Research Question ####
+Do the immigrants influence the election outcome of the US?
+	
+	
+	
+### Description of Data ###
+
+##### Presidential Election Data #####
+This data is provided by the MIT Election Data Lab, and it contains information from each presidential election from 2000 to present day. Information included in the data set are county FIPS code, state names, and the total number of votes for each candidate in each county. This includes Democratic, Republican, Green, and any "Other" parties. 
+ (Source: https://dataverse.harvard.edu/file.xhtml?fileId=6689930&version=11.0 )
+
+##### Census and Population Data #####
+This data is from the United States Census Bureau and contains information on foreign-born US immigrants, educational attainment, sex, place of birth and other numerous demographic indicators for 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 and 2020, 2021 and 2022. This data is organized by counties and their states. 
+ (Source: https://data.census.gov/table?q=foreign+born&g=010XX00US$0500000&tp=false )
+
+##### How are these data sets related? #####
+Both of this data set contains information on State, County and Year. We can make a new surrogate key combining County, State and Year named County_State_Year and join them for our analysis.  
+
+
+### Data Processing ###  
+
+##### Census_percent Data #####
+From 2010 to 2022, 12 data sets were loaded. After that, the data sets were cleaned, keeping our relevant variables. After that, we created a single data set named Census by combining all 12 data sets. Additionally, we created a new variable called Rural in accordance with the USDA's Economic Research Service definition. This variable has values of 1 if a county's population is less than or equal to 19,999 and 0 if the data set's total population variable is used. Next, we produced a new data set named Census_percent, which solely contains percentage values in its numeric columns. Data from the Census were used to create this data set. 
+
+There is a lot of fluctuation in the number of immigrants among US states and counties, and because this variation does not accurately reflect the real scale of immigration across counties, we use percentages rather than actual numbers in our data moving forward. Next, we examined the data for any missing values.  We found some missing values. Considering the nature of the data and the potential complexities of imputing these missing values, it may be prudent to remove rows with missing data in these specific columns, as imputation might not accurately replace the true values and could introduce bias into the analysis. So we remove the missing values. Next, we used histograms to look at the extreme values. We think that the data is of excellent quality because it comes from the United States Census. The distributions of the majority of our variables are rather close to normal, and we did not find a significant degree of extreme values.
+
+
+##### Presidential Election_Data #####
+This data is compiled by election year. For each year there is a US presidential election, there is information about every county in every state, and how many total votes there were for any particular party that had a major candidate running for president. To clean this data, we eliminated any party and candidate that was not either Democrat or Republican. This helps to narrow the focus of our project. In addition, we eliminated any data that was recorded prior to 2012. Finally, we matched column names and formatting to fit the Census data style. This allowed us to merge the data with ease. There were no missing values or extreme values noted. 
+
+##### Master_Data #####
+Using the County_State_Year Key, we merged our Census_percent dataset with our Election_data to create a Master_data. Next, we created a new variable called Vote_Difference, which we measured as the difference between Republican and Democratic votes in our master data.
+
+##### Description of the Variables in the Master_Data #####
+1.	County_State_Year: It designates a certain county in a state during a specific year  
+2.	Year: Designates observation in a given year  
+3.	County: The counties' names  
+4.	State: Names of states  
+5.	Female: The proportion of female in a certain county  
+6.	Foreign_born: The proportion of foreign-born individuals in a specific county  
+7.	Associate_degree: This represents the proportion of a county's population with an Associate degree  
+8.	Bachelor_degree: This is the proportion of a county's population with a bachelor's degree  
+9.	Graduate_or_professional_degree: This refers to the proportion of a county's population with a graduate or professional degree  
+10.	Rural: 1 if the county is considered rural, 0 if it is considered urban  
+11.	Democrat_votes: Votes that a Democratic candidate obtained  
+12.	Republican_votes: Votes received by a Republican candidate  
+13. Democrat_vote_share: Share of votes recieved by the democrat compared to the total number of votes received by the democrats and republicans.
+14.  Republican_vote share: Share of votes received by the republicans compared to the total number of votes received by the democrats and republicans.
+15. Vote_share_difference: It is the difference between the Republican_vote_share and Democrat_vote_share; calculate as subtracting Democrat_vote_share from the Republican_vote_share. 
+16.	Vote_Difference: Difference of votes between Republican candidate and Democrat candidate  
+
+## Findings ##
+
+0) We can check a general summary of our data
+
+
+```{r, echo=FALSE}
+summary(Master_Data)
+```
+
+
+
+#### **Female** Summary Statistics and Findings ####
+
+1) Understand how the female data is distributed.
+
+
+```{r, echo=FALSE}
+hist(Master_Data$Female)
+```
+
+
+The percentage of female population in a county is looking like it is having central tendency. 
+
+
+
+2) In **rural** counties, how has the sex ratio changed over our time period of interest?
+
+```{r, echo=FALSE}
+Scatter2 = Master_Data |>
+  filter(Rural==1) |>
+  ggplot(aes(x =Year,y =Female)) + geom_line() + ggtitle("Female Pop % in Rural Counties, 2012-2020")
+
+Scatter2
+```
+
+
+In rural counties, the female population has decreased from just over 60% to below 60% over 8 years. 
+
+
+3) In **rural** counties, how do **foreign born and female populations** associate with each other?
+
+
+```{r, echo=FALSE}
+#group by rural and find the mean of female
+
+Fem_Rural = Master_Data |>
+  filter(Rural==1) |>
+  mutate(
+    Fem_Mean = mean(Female)
+  ) |>
+  ggplot(aes(x = Foreign_born, y=Female)) + geom_point() + ggtitle("Foreign Born Pop % and Female Pop %")
+Fem_Rural
+
+```
+
+This is not telling us a lot, we would expect that more foreign born would associate with more females in a county because we anticipate that about half of those immigrating to the US are females. 
+
+
+We can check a binsreg of Female populations compared to foreign populations.
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+binsreg(Master_Data$Female, Master_Data$Foreign_born)
+```
+
+
+This is still a little unclear, but it appears that there could be some positive trend between female populations and immigrant populations, which is what we anticipated after looking at the previous figure. 
+
+
+
+4) How it does **female associate with Vote_Difference**?
+```{r, echo=FALSE}
+Scatter3 = plot(Master_Data$Female, Master_Data$Vote_Difference, main = "Female Pop % and Vote_Difference ")
+```
+
+Based on this scatter plot, we could say that it appears that females are more likely to vote Democrat, because there is an overall negative difference between Republican and Democratic votes. 
+
+
+
+Let's look at a binsreg plot that compares female population and the vote difference. 
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+binsreg(Master_Data$Vote_Difference, Master_Data$Female)
+```
+
+This can indicate that there could be a positive association between female population a  county and a greater number of Democratic votes in that county. 
+
+#### **Foreign born** Summary Statistics and Findings ####
+
+5) Examine the skew (if any) of foreign born population data
+
+
+```{r, echo=FALSE}
+hist(Master_Data$Foreign_born)
+```
+
+These values are already in % so we know that there is skew in the data. It seems like there is often less than 20% of a county's population that is foreign born. 
+
+
+6) Examine 8 states and how **foreign born and Vote_Difference** relate over time.
+
+```{r, echo=FALSE}
+years = c(2012, 2016, 2020)
+states = c("CALIFORNIA", "TEXAS", "ALABAMA", "OREGON", "NEW YORK", "ILLINOIS", "IDAHO", "COLORADO")
+Master_Data |> 
+  filter(Year %in% years & State %in% states) |>
+  ggplot( aes(Foreign_born,Vote_Difference, col = State)) +
+    geom_point() +
+    facet_wrap(. ~ Year) +
+  ggtitle("Vote_Difference and Foreign Born Pop. % in Select States")
+```
+
+
+In this graphic, we are **comparing four states that are typically "Red" and four states that are typically "Blue"** to understand if there has been any noticeable change over the three elections. 
+
+
+We can see in the 2020 election, the data is spread out more toward the bottom left than it was in 2012. We could interpret this to mean that **over time, some of these states are getting more "Blue"**. This dispersion in the dots also coordinates with a tiny amount of growth toward more foreign born population overall. 
+
+
+
+7)  Is there a relationship between **urban counties, rural counties, and foreign** born population?
+
+
+```{r, echo=FALSE}
+Master_Data |>
+  group_by(State) |>
+  mutate(
+    Foreign_Avg = mean(Foreign_born)
+  ) |>
+  ggplot(aes(x=State, y = Foreign_Avg)) + geom_bar(stat = 'identity', fill= 'light blue') + facet_wrap(~Rural) +ggtitle("Average Foreign Born Pop % in Urban (0) vs. Rural (1) Counties")
+
+```
+
+It looks like rural counties have fewer immigrant populations than urban counties. 
+
+#### Main Findings - **Foreign Born Population and Vote_Difference** ####  
+
+8) Examine any relationship between **foreign born population and Vote_Difference**.
+```{r, echo=FALSE}
+Scatter = plot(Master_Data$Foreign_born, Master_Data$Vote_Difference, main = "Foreign Born Pop. % and Vote_Difference")
+```
+
+So far, this is telling us that there may be a relationship between an **increase in foreign born population and a decrease in Republican votes**. 
+
+
+
+9) Examine averages of **state-level average foreign born populations and average Vote_Difference**. 
+
+```{r, echo=FALSE}
+Master_Data2 = Master_Data |>
+  group_by(State) |>
+  mutate(
+    Vote_Diff_mean = mean(Vote_Difference), 
+    Foreign_mean = mean(Foreign_born)
+    )
+
+ggplot(Master_Data2, aes(x=Foreign_mean, y=Vote_Diff_mean)) + 
+  geom_point() + ggtitle("Avg. Foreign Born Pop % and Avg. Vote_Difference (State Level)")
+```
+
+This is a little hard to see the relationship, so let's try geom_smooth
+
+```{r, echo=FALSE, message=FALSE}
+Master_Data2 = Master_Data |>
+  group_by(State) |>
+  mutate(
+    Vote_Diff_mean = mean(Vote_Difference), 
+    Foreign_mean = mean(Foreign_born)
+    )
+
+ggplot(Master_Data2, aes(x=Foreign_mean, y=Vote_Diff_mean)) + 
+  geom_smooth() + ggtitle("Smooth Avg. Foreign Born Pop. % and Avg. Vote_Difference (State-Level)")
+
+```
+
+
+After looking at all of these graphs, we could associate **larger mean foreign population in a state with higher mean amount of Democratic votes**. 
+
+
+Ultimately, our research question is interested in the relationship between foreign born population in a county, and how that population may impact and be associated with political outcomes. 
+
+10) Examine **foreign born and Vote_Difference**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(Master_Data, aes(x = Foreign_born, y=Vote_Difference, colour = State)) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "Foreign Born %", y = "Vote_Difference") +
+  ggtitle("Foreign Born Pop. % and Vote_Difference")
+
+```
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+p2 = Master_Data |>
+  group_by(State)
+
+  ggplot(p2, aes(x = Foreign_born, y=Vote_Difference, colour = State)) +
+  geom_smooth(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "Foreign Born %", y = "Vote_Difference") +
+    ggtitle("Smooth Foreign Born Pop. % and Vote_Difference")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE,error=FALSE, results='hide',fig.keep='all'}
+binsreg(Master_Data$Vote_Difference, Master_Data$Foreign_born)
+```
+
+
+Here we can see that a **larger proportion of foreign born individuals in an area is associated with more Democratic votes for US president**. This finding is corroborated by the binsreg chart below. 
+
+Overall, we anticipate our regression findings to indicate a positive relationship between foreign born population and the Vote_Difference variable, showing that larger immigrant populations coincide with more votes for Democratic candidates. 
+
+
+
