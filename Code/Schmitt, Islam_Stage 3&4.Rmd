@@ -1,0 +1,172 @@
+---
+title: 'Stage 3 & 4: Schmitt and Islam'
+author: "Katelyn Schmitt and Md Sayemul Islam"
+date: "12/2/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Immigrant Populations and Presidential Election Outcomes ##
+### Katelyn Schmitt and Md Sayemul Islam ###
+
+### Stage 3 and 4: Final Exploratory Analysis & Econometric Analysis ###
+
+### Advanced Data Analytics - ECNS_560 ###
+#### December 2, 2023 ####  
+
+### Motivation ###  
+Immigrants in the US have been critical in shaping the viewpoints of communities and have potential to sway political election outcomes. As immigrant populations continue to grow, it is important to consider how the presence of foreign born people may have a relationship with a community's political agenda. The extent to which immigrants participate in and influence local politics can have a substantial influence on the representation of various perspectives in American society. Recognizing the political preferences and engagement of immigrant populations is critical for fostering inclusive and representative governance.  
+
+Immigrant populations are particularly concerned about issues such as immigration reform, education, health care, and labor rights. Their participation in local politics has the potential to impact policy decisions in these areas. Policymakers can design more effective methods to serve the different needs of their people by studying and comprehending these policy implications. This theme also emphasizes the significance of social cohesion. Interactions between immigrant and non-immigrant populations can have an impact on community dynamics, with the possibility of both political polarization and cooperation. Understanding how immigrant communities integrate politically and socially can aid in the development of more peaceful and cohesive societies.
+
+
+### Research Question ###
+
+#### Descriptive Research Question ####
+What role do immigrants play in US presidential elections?
+
+### Description of Data ###
+
+##### Presidential Election Data #####
+This data is provided by the MIT Election Data Lab, and it contains information from each presidential election from 2000 to present day. Information included in the data set are county FIPS code, state names, and the total number of votes for each candidate in each county. This includes Democratic, Republican, Green, and any "Other" parties. 
+ (Source: https://dataverse.harvard.edu/file.xhtml?fileId=6689930&version=11.0 )
+
+##### Census and Population Data #####
+This data is from the United States Census Bureau and contains information on foreign-born US immigrants, educational attainment, sex, place of birth and other numerous demographic indicators for 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 and 2020, 2021 and 2022. This data is organized by counties and their states. 
+ (Source: https://data.census.gov/table?q=foreign+born&g=010XX00US$0500000&tp=false )
+
+##### How are these data sets related? #####
+Both of these data sets contain information on State, County and Year. We can make a new surrogate key combining County, State and Year named County_State_Year and join them for our analysis.  
+
+
+### Data Processing ###  
+
+##### Census_percent Data #####
+From 2010 to 2022, 12 data sets were loaded. After that, the data sets were cleaned, keeping our relevant variables. Next, we created a single data set named Census by combining all 12 data sets. Additionally, we created a new variable called Rural in accordance with the USDA's Economic Research Service definition. This variable has values of 1 if a county's population is less than or equal to 19,999 and 0 if the data set's total population variable is used. Next, we produced a new data set named Census_percent, which solely contains percentage values in its numeric columns. Data from the Census were used to create this data set. 
+
+There is a lot of fluctuation in the number of immigrants among US states and counties, and because this variation does not accurately reflect the real scale of immigration across counties, we use percentages rather than actual numbers in our data moving forward. Next, we examined the data for any missing values.  We found some missing values. Considering the nature of the data and the potential complexities of imputing these missing values, it may be prudent to remove rows with missing data in these specific columns, as imputation might not accurately replace the true values and could introduce bias into the analysis. So we remove the missing values. Next, we used histograms to look at the extreme values. We think that the data is of excellent quality because it comes from the United States Census. The distributions of the majority of our variables are rather close to normal, and we did not find a significant degree of extreme values.
+
+
+##### Presidential Election_Data #####
+This data is compiled by election year. For each year there is a US presidential election, there is information about every county in every state, and how many total votes there were for any particular party that had a major candidate running for president. To clean this data, we eliminated any party and candidate that was not either Democrat or Republican. This helps to narrow the focus of our project. In addition, we eliminated any data that was recorded prior to 2012. Finally, we matched column names to fit the Census data style. This allowed us to merge the data with ease. There were no missing values or extreme values noted. 
+
+##### Master_Data #####
+Using the County_State_Year Key, we merged our Census_percent data set with our Election_data to create a Master_data. Next, we created a new variable called Vote_Difference, which we measured as the difference between Republican and Democratic votes in our master data. In order to make this more controlled across counties of varying sizes, we aggregate the total votes and create Democratic and Republican vote share variables as percentages of the total votes in a county. 
+
+##### Description of the Variables in Master_Data #####
+1.	County_State_Year: It designates a certain county in a state during a specific year.  
+2.	Year: Designates observation in a given year.  
+3.	County: The counties' names.  
+4.	State: Names of states.  
+5.	Female: The proportion of female in a certain county.  
+6.	Foreign_born: The proportion of foreign-born individuals in a specific county. Immigrants are represented by the Foreign_Born variable. 
+7.	Associate_degree: This represents the proportion of a county's population with an Associate degree.  
+8.	Bachelor_degree: This is the proportion of a county's population with a bachelor's degree.  
+9.	Graduate_or_professional_degree: This refers to the proportion of a county's population with a graduate or professional degree.  
+10.	Rural: 1 if the county is considered rural, 0 if it is considered urban.  
+11.	Democrat_votes: Votes that a Democratic candidate obtained.  
+12.	Republican_votes: Votes received by a Republican candidate.  
+13.    Democrat_vote_share: Share of votes received by the Democratic candidate compared to the total number of votes received by the Democrats and Republicans.
+14.    Republican_vote share: Share of votes received by the Republican candidate compared to the total number of votes received by the Democrats and Republicans.
+15.    Vote_share_difference: It is the difference between the Republican_vote_share and Democrat_vote_share; calculated as subtracting Democrat_vote_share from the Republican_vote_share. 
+
+
+## Findings From Exploratory Analyses ##
+
+
+
+#### Main Findings - **Foreign Born Population and Vote Share Difference** ####  
+
+
+Figure 1) Distribution of Foreign Born populations in Counties
+
+
+```{r img-with-knitr1, echo=FALSE, fig.align='center', out.width='100%', fig.cap=''}
+knitr::include_graphics("C:/Users/x26f521/Documents/Foreign_Born_Dist.png")
+```
+
+Based on Figure 1, we see that most US counties have a Foreign Born population less than 10% of the total county population. This data is right skewed, but We are not using log transformations because Foreign_Born is already in percentage values. 
+
+
+Figure 2) Relationship between Foreign Born population and Vote Share Difference
+
+```{r img-with-knitr2, echo=FALSE, fig.align='center', out.width='100%', fig.cap=''}
+knitr::include_graphics("C:/Users/x26f521/Documents/Foreign_Vote_.png")
+```
+
+
+Figure 2 displays every US county in blue. The red line depicts the smooth trend line between Vote Share Difference and Foreign Born Population. This trend is showing that higher populations of Foreign Born people in a county is trending with more votes for the Democratic candidate. 
+
+
+Figure 3) Three State Comparison over Three Presidential Elections
+
+ 
+```{r img-with-knitr3, echo=FALSE, fig.align='center', out.width='100%', fig.cap=''}
+knitr::include_graphics("C:/Users/x26f521/Documents/Three_State_Compare.png")
+```
+
+Figure 3 includes the counties in California (orange), New York (green), and Texas (blue). These states were chosen for analysis based on their relatively high immigrant populations and past election voting trends. Looking at the trends over the three elections, it is clear that the 2020 Presidential Election experienced a shift up in Republican votes. The majority of 2020 data points are higher than in 2012 and 2016.This informs our analysis by rejecting the idea that Foreign Born populations are the sole differential between a county ultimately voting Republican or Democrat in an election.  
+
+
+
+### Econometric Analysis ###
+
+##### Motivation #####
+We use regression analysis to corroborate some of the relationships that we find in our exploratory analysis. A regression analysis helps us control other variables while looking for the relationship between our independent variable of interest and the dependent variable. We also reinstate that our results do not have causal inference. But for a better understanding, we included the regression supporting our exploratory analysis.
+
+##### Methods #####
+We adopted a fixed effect OLS model. Our variable of interest is Foreign Born. We also controlled for Female, Associate degree, Bachelor degree, Graduate or professional degree and Rural. We considered County, State and Year fixed effect. The County and State fixed effects will account for variations across Counties and states. This could include cultural, institutional, or economic factors that are specific to each state and do not change over time. The Year fixed effect helps control for unobserved or time-specific factors that may affect all entities in the same way during a particular year. This could include macroeconomic conditions, policy changes, or other time-specific shocks. Before running the regression, we checked for multicollinearity issues and found no serious multicollinearity issues in our data. So, we decided to include all the variables in a single regression model. All the variables except Rural is expressed in terms of percentage. 
+
+##### Results #####
+We can observe that the coefficient of Foreign_born is negative in our regression model (1). It suggests that, ceteris paribus, a one percentage point increase in immigration is linked to a 0.014 percentage point decrease in the Vote share difference. In other words, there's a greater chance that immigrants have positive influence on the Democrats’ vote share. The results of our exploratory analysis, which show the relationship between foreign-born individuals and the vote share difference, further support our findings. The coefficient on Foreign_born is statistically significant so we may argue that the relationship is valid and evident. Additionally, the coefficients of Female and Graduate_or_professional_degree, indicate that a county with a higher proportion of female population and members with graduate- or professional-level degrees is likely to vote more Democratic. Next, there appears to be a positive relationship between counties with higher rates of Associate_degree and Bachelor_degree holders and Republican voting preferences.
+
+
+
+```{r img-with-knitr3a, echo=FALSE, fig.align='center', out.width='100%', fig.cap=' '}
+knitr::include_graphics("C:/Users/x26f521/Documents/Regression_table.jpeg")
+```
+
+We have added two other regression models. Model (2) estimates the regression coefficients for the Rural counties only. The coefficient of Foreign_born is very identical to that of the model (1) and statistically significant. Model (3) estimates the regression coefficients for the Urban counties only. The coefficient on Foreign_born is very close to the coefficient on Foreign_born in model (1) and model (2). These findings suggest that the role of foreign-born population on county vote outcome is consistent across both rural and urban areas. Regardless of the location, immigrants seem to play a significant role in shaping the voting patterns within counties.
+
+
+##### Limitations #####
+
+Although, we have tried to do best with our data and analysis, our findings contain certain limitations:
+First, it would be better if we could have found data for a longer period. This would have allowed us to analyze trends and patterns more accurately. Additionally, a larger data set would have provided a more comprehensive understanding of the situation at hand.  This would make a more proper variation and add statistical power.
+
+
+Second, there could be many undocumented immigrants on whom we do not have any data. These undocumented immigrants could also have some influence on their neighborhood and may influence people’s voting choice around them.
+
+
+Finally, it would be interesting if we could use information on immigrants by their country of origin. This could convey how immigrants from different counties have varying preferences for different political parties or ideologies. It would provide valuable insights into how diverse immigrant communities contribute to the political landscape and shape policies based on their unique backgrounds and experiences. Additionally, analyzing the political preferences of immigrants by country of origin could help identify patterns or trends that may influence future policy decisions regarding immigration and integration efforts. 
+
+
+#### Appendix - **Rural/Urban Differences, and Female Voter Findings** ####  
+ 
+ 
+Figure 4) Rural and Urban County Foreign Born Populations
+ 
+```{r img-with-knit4, echo=FALSE, fig.align='center', out.width='100%', fig.cap=''}
+knitr::include_graphics("C:/Users/x26f521/Documents/Rural_Urb_Foreign.png")
+```
+ 
+Figure 4 displays a given state based on their rural and urban distinctions and the average Foreign Born Population %. 
+ 
+This finding encouraged us to run supplementary regression on Urban and rural counties separately to understand whether the coefficients on Foreign Born populations are different in communities with higher/lower total populations. Model (2) estimates the regression coefficients for the Rural counties only.Model (3) estimates the regression coefficients for the Urban counties only. These findings are reported with our main regression results above. 
+
+
+Figure 5) Female Voting Preferences
+ 
+```{r img-with-knitr5, echo=FALSE, fig.align='center', out.width='100%', fig.cap=''}
+knitr::include_graphics("C:/Users/x26f521/Documents/Female_Vote_Share.png")
+```
+ 
+Figure 5 is describing the voting preferences of counties with varying female populations. Counties with higher female populations are seen to vote more consistently for Democratic candidates. This encouraged us to make Female a control variable. 
+
+
+##### AI Disclosure #####
+We did not use any AI assistance in our work. We have only used resources available online like Stack Overflow and the help of TA Sam and our classmates. 
