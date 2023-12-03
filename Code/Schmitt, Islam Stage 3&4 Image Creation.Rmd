@@ -1,0 +1,92 @@
+---
+title: "Project-Stage 2"
+author: "Katy Schmitt"
+date: "2023-10-30"
+output: html_document
+---
+
+```{r, echo=FALSE}
+install.packages(c("tidyverse", "ggplot2", "readxl", "binsreg", "tidyr", "dplyr", "sandwich", "RColorBrewer"))
+install.packages("binscatter")
+library(tidyverse)
+library(ggplot2)
+library(RColorBrewer)
+library(readxl)
+library(binsreg)
+library(tidyr)
+library(dplyr)
+library(sandwich)
+Master_data_2 <- read_excel("~/Master_data-2.xlsx")
+#View(Master_data_2)
+
+```
+
+## Immigrant Populations and Presidential Election Outcomes ##
+### Katy Schmitt and Md Sayemul Islam ###
+### Stage 3&4 Graph Creation ###
+
+### Advanced Data Analytics - ECNS_560 ###
+#### December 2, 2023 ####  
+
+#### **Female** Findings ####
+
+1) How does **female associate with Vote Share Difference**?
+```{r, echo=FALSE}
+Scatter1 = ggplot(data=Master_data_2, aes(Master_data_2$Female, Master_data_2$Vote_share_difference)) +geom_point(color="pink") +labs(title ='Female and Vote Share Difference', x='Female Population (%)', y='Vote Share Difference') + theme_classic() +geom_hline(yintercept=0, linetype="dashed", color = "black") +geom_smooth()
+Scatter1
+```
+
+
+2) Distribution of Foreign Born population in US counties
+```{r}
+#adding a pdf image of pretty hist here
+
+Foreign_Hist = ggplot(data=Master_data_2, aes(x=Foreign_born))+
+  geom_histogram(bins=40, color="light blue")+
+  labs(x= 'Foreign Born Pop. (%)', y='County Frequency', title = 'Foreign Born Distribution in US Counties') +theme_classic()
+
+Foreign_Hist
+```
+
+
+
+3) California, New York, and Texas Vote Share Trends Over Time
+
+```{r, echo=FALSE}
+years = c(2012, 2016, 2020)
+states = c("CALIFORNIA", "TEXAS","NEW YORK")
+Master_data_2  %>%
+  filter(Year %in% years & State %in% states) %>%
+  ggplot( aes(Foreign_born,Vote_share_difference, col = State)) +
+    geom_point() +
+    facet_wrap(. ~ Year)+labs(title ='Foreign Born Population and Vote Share by State', x='Foreign Born Population (%)', y='Vote Share Difference') +geom_hline(yintercept=0, linetype="dashed", color = "black")  + theme_classic()
+```
+
+
+4)  Is there a relationship between **urban counties, rural counties, and foreign** born population?
+
+
+```{r, echo=FALSE}
+Master_data_2020 <- Master_data_2 %>%
+  filter(Year==2020) 
+
+Master_data_20202 = Master_data_2020 %>%
+  group_by(State, Rural) %>%
+  summarise(count = n(), Foreign_Avg = sum(Foreign_born)) #%>%
+
+Master_data_20202 <- Master_data_20202 %>%
+  mutate(state_avg = Foreign_Avg/count)
+  
+  
+  Avg_Graph = ggplot(aes(x=State, y = state_avg), data=Master_data_20202) + geom_bar(stat = 'identity', fill= 'light blue',) + facet_wrap(~Rural) + theme_classic() +labs(title='Avg. Foreign Born Population in Urban (0) vs. Rural (1) Counties in 2020', y='Foreign Born Population Average in State (%)', x='State') +theme(text = element_text(size = 7.5)) +coord_flip()
+
+  Avg_Graph
+```
+
+5) Examine any relationship between **foreign born population and Vote Share Difference**.
+```{r, echo=FALSE}
+FB_VS = ggplot(data=Master_data_2, aes(x = Foreign_born, y=Vote_share_difference)) +geom_point(show.legend = FALSE, alpha = 0.2, color = "light blue")  +labs(x = 'Foreign born Population (%)', y='Vote Share Difference', title = 'Foreign Born Population and Vote Share Difference') +geom_smooth(color="red") +geom_hline(yintercept=0, linetype="dashed", color = "black")  + theme_classic()
+
+FB_VS
+```
+
